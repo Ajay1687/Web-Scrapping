@@ -1,21 +1,35 @@
+#Importing the libraries
 import bs4
 from urllib.request import urlopen as ureq
 from bs4 import BeautifulSoup as soup
 from bs4 import NavigableString as ns
 
+#URL from which I would scrap the data.
 my_url = "https://www.newegg.com/Product/ProductList.aspx?Submit=ENE&DEPA=0&Order=BESTMATCH&Description=graphic+cards&N=-1&isNodeId=1"
 
+#Initializing the url object to do the request
 uClient = ureq(my_url)
+
+#Reading the response html page onto another object
 page_html = uClient.read()
 
+#Closing the connection
 uClient.close()
 
+
+#Making use of the Soup library, to parse the html page
 page_soup = soup(page_html,"html.parser")
 
+#The site had products aligned into grids, retireving all the grids here(in total there were 3 in this URL)
 grids = page_soup.findAll("div",{"class":"items-view is-grid"})
 grid_total = []
+
+#Combining all the grids into single one
 for grid in grids:
 	grid_total += grid  #Has all the containers in that grid
+
+
+#Initializing the csv file, into which we will write the products details
 
 fileName = "ProductList.csv"
 f = open(fileName,"w")
